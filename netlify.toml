@@ -1,0 +1,23 @@
+# Netlify config for the Angular frontend. The API runs on Cloud Run and is reached through
+# the /api proxy below, so the browser stays same-origin (no CORS) and the app keeps relative /api URLs.
+
+[build]
+  base    = "frontend"
+  command = "npm run build"
+  publish = "dist/frontend/browser"   # relative to base
+
+[build.environment]
+  NODE_VERSION = "22"                 # Angular 22 needs Node 22+
+
+# 1) Proxy API calls to Cloud Run (200 = rewrite; headers such as Authorization pass through).
+[[redirects]]
+  from   = "/api/*"
+  to     = "https://myyt-api-787324504913.us-central1.run.app/api/:splat"
+  status = 200
+  force  = true
+
+# 2) Serve the Angular app for every other path so deep links like /watch/123 work.
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200

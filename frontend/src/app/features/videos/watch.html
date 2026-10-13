@@ -1,0 +1,95 @@
+@if (loadError()) {
+  <div class="state">
+    <h2>{{ loadError() }}</h2>
+    <a routerLink="/" class="btn">Back to your library</a>
+  </div>
+} @else {
+  <div class="layout">
+    <section class="primary">
+      <div class="player" #playerHost>
+        @if (video(); as v) {
+          <youtube-player
+            [videoId]="v.youTubeId"
+            [width]="playerWidth()"
+            [height]="playerHeight()"
+            [playerVars]="playerVars"
+            placeholderImageQuality="high"
+          />
+        }
+      </div>
+
+      @if (video(); as v) {
+        <h1 class="title">{{ v.title }}</h1>
+
+        <div class="owner-row">
+          <div class="channel">
+            <div class="channel-avatar" aria-hidden="true">{{ (v.channelName ?? '?').charAt(0).toUpperCase() }}</div>
+            <div>
+              <div class="channel-name">{{ v.channelName ?? 'Unknown channel' }}</div>
+              <div class="muted">Added {{ v.createdAt | timeAgo }}</div>
+            </div>
+          </div>
+          <div class="actions">
+            <a class="pill-btn" [href]="v.watchUrl" target="_blank" rel="noopener">
+              <app-icon name="open" /> YouTube
+            </a>
+            @if (confirmingDelete()) {
+              <span class="confirm">
+                Remove from library?
+                <button type="button" class="pill-btn danger" (click)="delete()" [disabled]="deleting()">
+                  {{ deleting() ? 'Removing…' : 'Remove' }}
+                </button>
+                <button type="button" class="pill-btn" (click)="confirmingDelete.set(false)">Cancel</button>
+              </span>
+            } @else {
+              <button type="button" class="pill-btn" (click)="confirmingDelete.set(true)">
+                <app-icon name="delete" /> Remove
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="description">
+          <div class="desc-head">
+            <label for="watch-tags">Tags</label>
+            <span class="save-state" aria-live="polite">
+              @switch (saveState()) {
+                @case ('saving') { Saving… }
+                @case ('saved') { <app-icon name="check" /> Saved }
+              }
+            </span>
+          </div>
+          <app-tag-input
+            inputId="watch-tags"
+            [tags]="tags()"
+            (tagsChange)="onTagsChange($event)"
+            [known]="knownTags()"
+            placeholder="Add a tag and press Enter"
+          />
+          @if (saveError()) {
+            <p class="error" role="alert">{{ saveError() }}</p>
+          }
+          @if (tags().length) {
+            <div class="tag-links">
+              @for (tag of tags(); track tag) {
+                <a routerLink="/" [queryParams]="{ tags: tag }">#{{ tag }}</a>
+              }
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="skeleton-title"></div>
+        <div class="skeleton-line"></div>
+      }
+    </section>
+
+    <aside class="secondary" aria-label="More videos">
+      @if (related().length) {
+        <h2>{{ video()?.tags?.length ? 'More with these tags' : 'More from your library' }}</h2>
+      }
+      @for (item of related(); track item.id) {
+        <app-video-card [video]="item" [compact]="true" />
+      }
+    </aside>
+  </div>
+}

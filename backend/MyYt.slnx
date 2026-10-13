@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MyYt.Api/MyYt.Api.csproj" />
+    <Project Path="src/MyYt.Application/MyYt.Application.csproj" />
+    <Project Path="src/MyYt.Domain/MyYt.Domain.csproj" />
+    <Project Path="src/MyYt.Infrastructure/MyYt.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MyYt.Application.Tests/MyYt.Application.Tests.csproj" />
+    <Project Path="tests/MyYt.Domain.Tests/MyYt.Domain.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,164 @@
+:host {
+  display: block;
+  padding: 0 24px 48px;
+}
+
+.chips {
+  position: sticky;
+  top: 56px;
+  z-index: 10;
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  overflow-x: auto;
+  background: var(--bg);
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.chip {
+  flex: none;
+  height: 32px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 8px;
+  background: var(--bg-chip);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--bg-chip-hover);
+  }
+
+  &.active {
+    background: var(--bg-chip-active);
+    color: var(--fg-chip-active);
+  }
+}
+
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 16px;
+  margin: 4px 0 20px;
+
+  p {
+    flex: 1 1 280px;
+    margin: 0;
+    color: var(--text-2);
+
+    strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+  }
+}
+
+.segmented {
+  display: inline-flex;
+  padding: 2px;
+  border-radius: 10px;
+  background: var(--bg-chip);
+
+  button {
+    height: 30px;
+    padding: 0 12px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-2);
+
+    &.on {
+      background: var(--bg-elev);
+      color: var(--text);
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 40px 16px;
+  padding-top: 8px;
+}
+
+.skeleton {
+  .thumb {
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    background: var(--bg-skeleton);
+  }
+
+  .line {
+    height: 16px;
+    margin-top: 12px;
+    border-radius: 4px;
+    background: var(--bg-skeleton);
+    width: 90%;
+
+    &.short {
+      width: 60%;
+    }
+  }
+}
+
+.more {
+  display: flex;
+  justify-content: center;
+  padding: 32px 0;
+}
+
+.state {
+  max-width: 420px;
+  margin: 12vh auto 0;
+  text-align: center;
+
+  .big {
+    width: 96px;
+    height: 96px;
+    color: var(--text-2);
+  }
+
+  h2 {
+    margin: 12px 0 8px;
+    font-size: 22px;
+    font-weight: 500;
+  }
+
+  p {
+    margin: 0 0 20px;
+    color: var(--text-2);
+  }
+}
+
+@media (max-width: 656px) {
+  :host {
+    padding: 0 0 32px;
+  }
+
+  .chips,
+  .filter-bar {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .grid ::ng-deep .thumb {
+    border-radius: 0;
+  }
+
+  .grid ::ng-deep .details {
+    padding: 0 12px;
+  }
+}

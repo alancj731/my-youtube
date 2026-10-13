@@ -1,0 +1,116 @@
+<header class="topbar">
+  <div class="start">
+    <button type="button" class="icon-btn" (click)="toggleNav()" aria-label="Toggle navigation">
+      <app-icon name="menu" />
+    </button>
+    <a routerLink="/" class="brand" aria-label="MyYT home"><app-logo /></a>
+  </div>
+
+  <app-search-box class="center" />
+
+  <div class="end">
+    <button type="button" class="create" (click)="layout.openAddVideo()">
+      <app-icon name="add" />
+      <span>Add</span>
+    </button>
+
+    <div class="account">
+      <button
+        type="button"
+        class="avatar"
+        (click)="menuOpen.set(!menuOpen())"
+        [attr.aria-expanded]="menuOpen()"
+        aria-label="Account menu"
+      >
+        @if (auth.user()?.photoUrl; as photo) {
+          <img [src]="photo" alt="" referrerpolicy="no-referrer" />
+        } @else {
+          {{ initial() }}
+        }
+      </button>
+      @if (menuOpen()) {
+        <div class="menu-scrim" (click)="menuOpen.set(false)"></div>
+        <div class="menu" role="menu">
+          <div class="who">
+            <div class="avatar large">
+              @if (auth.user()?.photoUrl; as photo) {
+                <img [src]="photo" alt="" referrerpolicy="no-referrer" />
+              } @else {
+                {{ initial() }}
+              }
+            </div>
+            <div>
+              <div class="name">{{ auth.user()?.displayName }}</div>
+              <div class="email">{{ auth.user()?.email }}</div>
+            </div>
+          </div>
+          <hr />
+          <a routerLink="/tags" role="menuitem" (click)="menuOpen.set(false)">
+            <app-icon name="tag" /> Manage tags
+          </a>
+          <button type="button" role="menuitem" (click)="signOut()">
+            <app-icon name="logout" /> Sign out
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</header>
+
+<div class="body" [class.mini]="wide() && !navExpanded()">
+  @if (!wide() && navExpanded()) {
+    <div class="scrim" (click)="navExpanded.set(false)"></div>
+  }
+
+  <nav
+    class="sidebar"
+    [class.drawer]="!wide()"
+    [class.open]="navExpanded()"
+    [class.mini]="wide() && !navExpanded()"
+    aria-label="Library"
+  >
+    @if (!wide()) {
+      <div class="drawer-head">
+        <button type="button" class="icon-btn" (click)="toggleNav()" aria-label="Close navigation">
+          <app-icon name="menu" />
+        </button>
+        <a routerLink="/" class="brand"><app-logo /></a>
+      </div>
+    }
+
+    <a class="nav-item" routerLink="/" [class.active]="isHome()">
+      <app-icon name="home" />
+      <span>Home</span>
+    </a>
+    <a class="nav-item" routerLink="/tags" routerLinkActive="active">
+      <app-icon name="library" />
+      <span>Manage tags</span>
+    </a>
+
+    @if (navExpanded() || !wide()) {
+      <hr />
+      <h3>Your tags</h3>
+      @for (tag of tagService.tags.value(); track tag.id) {
+        <a
+          class="nav-item tag-item"
+          routerLink="/"
+          [queryParams]="{ tags: tag.name }"
+          [class.active]="isTagSelected(tag.name)"
+          [title]="tag.name"
+        >
+          <app-icon name="tag" />
+          <span class="label">{{ tag.name }}</span>
+          <span class="count">{{ tag.videoCount }}</span>
+        </a>
+      } @empty {
+        <p class="empty">Tags you add to videos show up here.</p>
+      }
+    }
+  </nav>
+
+  <main>
+    <router-outlet />
+  </main>
+</div>
+
+<app-add-video-dialog />

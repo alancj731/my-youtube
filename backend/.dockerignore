@@ -1,0 +1,9 @@
+# Never ship local secrets
+.env
+.env.*
+!.env.example
+
+**/bin/
+**/obj/
+tests/
+**/*.user

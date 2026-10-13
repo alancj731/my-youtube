@@ -1,0 +1,224 @@
+:host {
+  display: block;
+  padding: 24px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 402px;
+  gap: 24px;
+  max-width: 1754px;
+  margin: 0 auto;
+}
+
+.player {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+
+  ::ng-deep iframe,
+  ::ng-deep youtube-player-placeholder {
+    display: block;
+  }
+}
+
+.title {
+  margin: 12px 0 0;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.owner-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.channel {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.channel-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--avatar-bg);
+  color: #fff;
+  font-weight: 500;
+}
+
+.channel-name {
+  font-weight: 500;
+}
+
+.muted {
+  color: var(--text-2);
+  font-size: 12px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.confirm {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.pill-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 18px;
+  background: var(--bg-chip);
+  font-size: 14px;
+  font-weight: 500;
+
+  app-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  &:hover {
+    background: var(--bg-chip-hover);
+  }
+
+  &.danger {
+    background: var(--danger);
+    color: #fff;
+  }
+}
+
+.description {
+  margin-top: 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--bg-chip);
+
+  app-tag-input ::ng-deep .field {
+    background: var(--bg);
+  }
+}
+
+.desc-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+
+  label {
+    font-weight: 500;
+    font-size: 14px;
+  }
+}
+
+.save-state {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-2);
+  font-size: 13px;
+
+  app-icon {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+.tag-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-top: 10px;
+
+  a {
+    color: var(--link);
+    font-size: 14px;
+  }
+}
+
+.error {
+  margin: 8px 0 0;
+  color: var(--danger);
+  font-size: 14px;
+}
+
+.secondary {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  h2 {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+}
+
+.skeleton-title,
+.skeleton-line {
+  height: 24px;
+  margin-top: 16px;
+  border-radius: 6px;
+  background: var(--bg-skeleton);
+  width: 70%;
+}
+
+.skeleton-line {
+  height: 16px;
+  width: 40%;
+}
+
+.state {
+  max-width: 420px;
+  margin: 12vh auto 0;
+  text-align: center;
+
+  h2 {
+    font-weight: 500;
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 1016px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 656px) {
+  :host {
+    padding: 0 0 24px;
+  }
+
+  .player {
+    border-radius: 0;
+  }
+
+  .primary > :not(.player),
+  .secondary {
+    padding: 0 12px;
+  }
+
+  .secondary ::ng-deep app-video-card.compact .thumb {
+    width: 150px;
+  }
+}

@@ -1,0 +1,76 @@
+<div class="chips" role="toolbar" aria-label="Filter by tag">
+  <a class="chip" routerLink="/" [class.active]="!filter().tags.length">All</a>
+  @for (tag of chipTags(); track tag) {
+    <a class="chip" routerLink="/" [queryParams]="chipLink(tag)" [class.active]="filter().tags.includes(tag)">
+      {{ tag }}
+    </a>
+  }
+</div>
+
+@if (isFiltered()) {
+  <div class="filter-bar">
+    <p>
+      @if (loading() && !videos().length) {
+        Searching…
+      } @else {
+        {{ total() }} {{ total() === 1 ? 'video' : 'videos' }}
+      }
+      @if (filter().tags.length) {
+        tagged
+        @for (tag of filter().tags; track tag; let last = $last) {
+          <strong>#{{ tag }}</strong>{{ last ? '' : (filter().match === 'all' ? ' and ' : ' or ') }}
+        }
+      }
+      @if (filter().q) {
+        matching <strong>“{{ filter().q }}”</strong>
+      }
+    </p>
+    @if (filter().tags.length > 1) {
+      <div class="segmented" role="group" aria-label="Tag matching">
+        <button type="button" [class.on]="filter().match === 'all'" (click)="setMatch('all')">Match all</button>
+        <button type="button" [class.on]="filter().match === 'any'" (click)="setMatch('any')">Match any</button>
+      </div>
+    }
+    <a routerLink="/" class="btn ghost">Clear</a>
+  </div>
+}
+
+@if (error()) {
+  <div class="state">
+    <p>{{ error() }}</p>
+    <button type="button" class="btn" (click)="retry()">Try again</button>
+  </div>
+} @else if (!loading() && !videos().length) {
+  <div class="state">
+    @if (isFiltered()) {
+      <h2>No videos found</h2>
+      <p>Try another tag, switch to “match any”, or clear the search.</p>
+      <a routerLink="/" class="btn">Show all videos</a>
+    } @else {
+      <app-icon name="library" class="big" />
+      <h2>Your library is empty</h2>
+      <p>Paste a YouTube link to save it here, then tag it so you can find it later.</p>
+      <button type="button" class="btn primary" (click)="layout.openAddVideo()">Add your first video</button>
+    }
+  </div>
+} @else {
+  <section class="grid" aria-live="polite">
+    @for (video of videos(); track video.id) {
+      <app-video-card [video]="video" />
+    }
+    @if (loading()) {
+      @for (i of skeletons; track i) {
+        <div class="skeleton" aria-hidden="true">
+          <div class="thumb"></div>
+          <div class="line"></div>
+          <div class="line short"></div>
+        </div>
+      }
+    }
+  </section>
+  @if (hasMore() && !loading()) {
+    <div class="more" (appInView)="loadMore()">
+      <button type="button" class="btn" (click)="loadMore()">Load more</button>
+    </div>
+  }
+}

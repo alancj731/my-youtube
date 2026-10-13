@@ -1,0 +1,49 @@
+<header>
+  <h1>Manage tags</h1>
+  <p>Rename a tag to update every video that uses it. Removing a tag keeps the videos.</p>
+</header>
+
+@if (error()) {
+  <p class="error" role="alert">{{ error() }}</p>
+}
+
+<ul class="list">
+  @for (tag of tagService.tags.value(); track tag.id) {
+    <li>
+      <app-icon name="tag" class="lead" />
+      @if (editingId() === tag.id) {
+        <form class="edit" (submit)="$event.preventDefault(); rename(tag, nameInput.value)">
+          <input
+            #nameInput
+            class="text-input"
+            [value]="tag.name"
+            (keydown.escape)="editingId.set(null)"
+            aria-label="New tag name"
+            autofocus
+          />
+          <button type="submit" class="btn primary" [disabled]="busy()">Save</button>
+          <button type="button" class="btn ghost" (click)="editingId.set(null)">Cancel</button>
+        </form>
+      } @else {
+        <a class="name" routerLink="/" [queryParams]="{ tags: tag.name }">#{{ tag.name }}</a>
+        <span class="count">{{ tag.videoCount }} {{ tag.videoCount === 1 ? 'video' : 'videos' }}</span>
+        @if (deletingId() === tag.id) {
+          <span class="confirm">
+            Remove?
+            <button type="button" class="btn danger" (click)="remove(tag)" [disabled]="busy()">Remove</button>
+            <button type="button" class="btn ghost" (click)="deletingId.set(null)">Cancel</button>
+          </span>
+        } @else {
+          <button type="button" class="icon-btn" (click)="startEdit(tag)" [attr.aria-label]="'Rename ' + tag.name">
+            <app-icon name="edit" />
+          </button>
+          <button type="button" class="icon-btn" (click)="deletingId.set(tag.id)" [attr.aria-label]="'Remove ' + tag.name">
+            <app-icon name="delete" />
+          </button>
+        }
+      }
+    </li>
+  } @empty {
+    <li class="empty">No tags yet. Add tags when you save or watch a video.</li>
+  }
+</ul>

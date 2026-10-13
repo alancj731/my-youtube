@@ -1,0 +1,168 @@
+:host {
+  display: block;
+  width: 100%;
+  max-width: 640px;
+}
+
+.pill {
+  position: relative;
+  display: flex;
+  height: 40px;
+}
+
+.field {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  padding: 0 4px 0 16px;
+  border: 1px solid var(--border);
+  border-right: 0;
+  border-radius: 40px 0 0 40px;
+  background: var(--bg);
+  overflow: hidden;
+
+  .lead {
+    display: none;
+    width: 20px;
+    height: 20px;
+    color: var(--text-2);
+  }
+}
+
+.focused .field {
+  border-color: var(--link);
+  padding-left: 15px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+
+  .lead {
+    display: inline-flex;
+  }
+}
+
+input {
+  flex: 1;
+  min-width: 60px;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+
+  &::-webkit-search-cancel-button {
+    display: none;
+  }
+}
+
+.chip {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 2px 0 10px;
+  border-radius: 14px;
+  background: var(--bg-chip);
+  font-size: 14px;
+  white-space: nowrap;
+
+  button {
+    display: grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    padding: 3px;
+    border-radius: 50%;
+
+    &:hover {
+      background: var(--bg-hover);
+    }
+  }
+}
+
+.clear {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  border-radius: 50%;
+
+  &:hover {
+    background: var(--bg-hover);
+  }
+}
+
+.go {
+  flex: none;
+  width: 64px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 0 40px 40px 0;
+  background: var(--search-btn);
+
+  &:hover {
+    background: var(--bg-hover);
+  }
+}
+
+.suggestions {
+  position: absolute;
+  z-index: 50;
+  top: 44px;
+  left: 0;
+  right: 64px;
+  margin: 0;
+  padding: 12px 0;
+  list-style: none;
+  border-radius: 12px;
+  background: var(--bg-elev);
+  box-shadow: var(--shadow);
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 6px 20px;
+    cursor: pointer;
+    font-weight: 500;
+
+    app-icon {
+      width: 20px;
+      height: 20px;
+      color: var(--text-2);
+    }
+
+    .name {
+      flex: 1;
+    }
+
+    .count {
+      color: var(--text-2);
+      font-weight: 400;
+      font-size: 13px;
+    }
+
+    &.active,
+    &:hover {
+      background: var(--bg-hover);
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .field {
+    padding-left: 12px;
+  }
+
+  .go {
+    width: 48px;
+  }
+
+  .suggestions {
+    right: 0;
+  }
+}

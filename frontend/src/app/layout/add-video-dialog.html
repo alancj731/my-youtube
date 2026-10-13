@@ -1,0 +1,63 @@
+<dialog #dialog (close)="close()" (click)="onBackdropClick($event)" aria-labelledby="add-title">
+  <div class="panel">
+    <header>
+      <h2 id="add-title">{{ added() ? 'Saved to your library' : 'Add a video' }}</h2>
+      <button type="button" class="icon-btn" (click)="close()" aria-label="Close"><app-icon name="close" /></button>
+    </header>
+
+    @if (added(); as video) {
+      <div class="done">
+        <img [src]="video.thumbnailUrl" alt="" />
+        <div>
+          <h3>{{ video.title }}</h3>
+          <p class="muted">{{ video.channelName }}</p>
+          <p class="tags">
+            @for (tag of video.tags; track tag) {
+              <span>#{{ tag }}</span>
+            } @empty {
+              <span class="muted">No tags</span>
+            }
+          </p>
+        </div>
+      </div>
+      <footer>
+        <button type="button" class="btn" (click)="addAnother()">Add another</button>
+        <button type="button" class="btn primary" (click)="watch(video)">Watch now</button>
+      </footer>
+    } @else {
+      <form (submit)="$event.preventDefault(); save()">
+        <label for="video-url">YouTube link</label>
+        <input
+          id="video-url"
+          class="text-input"
+          type="text"
+          inputmode="url"
+          placeholder="https://www.youtube.com/watch?v=…"
+          [value]="url()"
+          (input)="url.set($any($event.target).value)"
+          autofocus
+          required
+        />
+
+        @if (previewId(); as id) {
+          <img class="preview" [src]="'https://i.ytimg.com/vi/' + id + '/mqdefault.jpg'" alt="Video thumbnail preview" />
+        }
+
+        <label for="video-tags">Tags</label>
+        <app-tag-input inputId="video-tags" [(tags)]="tags" [known]="knownTags()" placeholder="music, tutorial, cooking…" />
+        <p class="hint">Press Enter or comma after each tag.</p>
+
+        @if (error()) {
+          <p class="error" role="alert">{{ error() }}</p>
+        }
+
+        <footer>
+          <button type="button" class="btn" (click)="close()">Cancel</button>
+          <button type="submit" class="btn primary" [disabled]="!url().trim() || saving()">
+            {{ saving() ? 'Saving…' : 'Save' }}
+          </button>
+        </footer>
+      </form>
+    }
+  </div>
+</dialog>

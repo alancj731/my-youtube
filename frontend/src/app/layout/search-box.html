@@ -1,0 +1,48 @@
+<form class="pill" [class.focused]="focused()" role="search" (submit)="$event.preventDefault(); submit()">
+  <div class="field">
+    <app-icon name="search" class="lead" />
+    @for (chip of chips(); track chip) {
+      <span class="chip">
+        #{{ chip }}
+        <button type="button" (click)="removeChip(chip)" [attr.aria-label]="'Remove tag ' + chip">
+          <app-icon name="close" />
+        </button>
+      </span>
+    }
+    <input
+      #box
+      type="search"
+      [value]="text()"
+      [placeholder]="chips().length ? 'Add tag or text' : 'Search by tag or title'"
+      aria-label="Search"
+      autocomplete="off"
+      (input)="onInput(box.value)"
+      (keydown)="onKeydown($event)"
+      (focus)="focused.set(true)"
+      (blur)="focused.set(false)"
+    />
+    @if (chips().length || text()) {
+      <button type="button" class="clear" (click)="clear()" aria-label="Clear search">
+        <app-icon name="close" />
+      </button>
+    }
+  </div>
+  <button type="submit" class="go" aria-label="Search"><app-icon name="search" /></button>
+
+  @if (open()) {
+    <ul class="suggestions" role="listbox">
+      @for (tag of suggestions(); track tag.id; let i = $index) {
+        <li
+          role="option"
+          [class.active]="i === active()"
+          [attr.aria-selected]="i === active()"
+          (mousedown)="$event.preventDefault(); addChip(tag.name)"
+        >
+          <app-icon name="tag" />
+          <span class="name">{{ tag.name }}</span>
+          <span class="count">{{ tag.videoCount }}</span>
+        </li>
+      }
+    </ul>
+  }
+</form>
